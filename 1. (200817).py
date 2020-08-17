@@ -1,4 +1,5 @@
 import tensorflow as tf
+import numpy as np
 import warnings
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
@@ -94,19 +95,128 @@ warnings.filterwarnings('ignore')
 #     print(sess.run(b))
 
 ###################################################### 배열 최댓값 인덱스 찾기
-print('파이썬의 numpy 이용방법')
-import numpy as np
-a = np.array([0,0,1,0,0,0,0,0,0,0])
-print(np.argmax(a, axis=0))
+# print('파이썬의 numpy 이용방법')
+# import numpy as np
+# a = np.array([0,0,1,0,0,0,0,0,0,0])
+# print(np.argmax(a, axis=0))
+#
+# print('\n 텐서플로우 이용방법')
+# a = np.array([0,0,1,0,0,0,0,0,0,0])
+# b = tf.argmax(a, axis=0)
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(b))
 
-print('\n 텐서플로우 이용방법')
-a = np.array([0,0,1,0,0,0,0,0,0,0])
-b = tf.argmax(a, axis=0)
+#114 배열에서 최댓값 갖는 인덱스 찾기
+# import numpy as np
+# a = np.array([[0,0,1,0,0,0,0,0,0,0],
+#               [0,0,0,0,1,0,0,0,0,0],
+#               [0,0,0,0,0,0,1,0,0,0],
+#               [1,0,0,0,0,0,0,0,0,0],
+#               [0,0,0,0,0,0,0,0,1,0]])
+# import tensorflow as tf
+# b = tf.argmax(a, axis=1) # 0은 열, 1은 행
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(b))
+
+###################################################### 다차원 배열에서 행의 토탈값 출력
+# import numpy as np
+# a = np.array([[[1, 2, 3],
+#                [2, 1, 4],
+#                [5, 2, 1],
+#                [6, 3, 2]],
+#               [[5, 1, 3],
+#                [1, 3, 4],
+#                [4, 2, 6],
+#                [3, 9, 3]],
+#               [[4, 5, 6],
+#                [7, 4, 3],
+#                [2, 1, 5],
+#                [4, 3, 1]]])
+#
+# print('numpy 이용했을 때')
+# print(np.sum(a, axis=0))
+#
+# print('\n 텐서 플로우 이용했을 때')
+# a = np.array([[[1, 2, 3],
+#                [2, 1, 4],
+#                [5, 2, 1],
+#                [6, 3, 2]],
+#               [[5, 1, 3],
+#                [1, 3, 4],
+#                [4, 2, 6],
+#                [3, 9, 3]],
+#               [[4, 5, 6],
+#                [7, 4, 3],
+#                [2, 1, 5],
+#                [4, 3, 1]]])
+#
+# d = tf.reduce_sum(a, reduction_indices=[0])
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(d))
+
+# 115 다차원 평균값 구하기
+# a = np.array([[[1, 2, 3],
+#                [2, 1, 4],
+#                [5, 2, 1],
+#                [6, 3, 2]],
+#               [[5, 1, 3],
+#                [1, 3, 4],
+#                [4, 2, 6],
+#                [3, 9, 3]],
+#               [[4, 5, 6],
+#                [7, 4, 3],
+#                [2, 1, 5],
+#                [4, 3, 1]]])
+#
+# d = tf.reduce_mean(a, reduction_indices=[0])
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(d))
+
+###################################################### 텐서플로우 내적
+# print('numpy 형식')
+# a = np.array([[2,2,2],[2,2,2]])
+# b = np.array([[3,3],[3,3],[3,3]])
+# res = np.dot(a,b)
+# print(res)
+#
+# print('\n tensorflow 형식')
+# x = tf.placeholder("float",[2,3]) # (2,3) 행렬의 실수형 데이터를 담을 변수
+# y = tf.placeholder("float",[3,2])
+# rs = tf.matmul(x, y)
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(rs, feed_dict={x:[[2,2,2],[2,2,2]], y:[[3,3],[3,3],[3,3]]}))
+
+#116
+a = np.array([[6,7],[3,5],[2,9]])
+b = np.array([[3,8,1],[4,5,2]])
+
+import tensorflow as tf
+x = tf.placeholder("float",[3,2]) # (2,3) 행렬의 실수형 데이터를 담을 변수
+y = tf.placeholder("float",[2,3])
+rs = tf.matmul(x, y)
 
 init = tf.global_variables_initializer()
 
 with tf.Session() as sess:
     sess.run(init)
-    print(sess.run(b))
-
-######################################################
+    print(sess.run(rs, feed_dict={x:[[6,7],[3,5],[2,9]], y:[[3,8,1],[4,5,2]]}))
