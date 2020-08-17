@@ -2,10 +2,13 @@ import tensorflow as tf
 import numpy as np
 import warnings
 import os
+from tensorflow.examples.tutorials.mnist import input_data
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 warnings.filterwarnings('ignore')
 # old_v = tf.logging.get_verbosity()
 # tf.logging.set_verbosity(tf.logging.ERROR)
+
+
 # hello = tf.constant("Hello Tensorflow")
 #
 # sess = tf.Session() # 그래프를 실행할 세션을 구성
@@ -206,17 +209,118 @@ warnings.filterwarnings('ignore')
 #     sess.run(init)
 #     print(sess.run(rs, feed_dict={x:[[2,2,2],[2,2,2]], y:[[3,3],[3,3],[3,3]]}))
 
-#116
-a = np.array([[6,7],[3,5],[2,9]])
-b = np.array([[3,8,1],[4,5,2]])
+# 116
+# a = np.array([[6,7],[3,5],[2,9]])
+# b = np.array([[3,8,1],[4,5,2]])
+#
+# import tensorflow as tf
+# x = tf.placeholder("float",[3,2]) # (2,3) 행렬의 실수형 데이터를 담을 변수
+# y = tf.placeholder("float",[2,3])
+# rs = tf.matmul(x, y)
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(rs, feed_dict={x:[[6,7],[3,5],[2,9]], y:[[3,8,1],[4,5,2]]}))
 
-import tensorflow as tf
-x = tf.placeholder("float",[3,2]) # (2,3) 행렬의 실수형 데이터를 담을 변수
-y = tf.placeholder("float",[2,3])
-rs = tf.matmul(x, y)
+###################################################### 텐서플로우에서 mnist 불러오기
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
+#
+# batch_xs, batch_ys = mnist.train.next_batch(100)
+#
+# # print(batch_xs.shape)
+# # print(batch_ys.shape)
+#
+# # 117
+# batch_xs, batch_ys = mnist.test.next_batch(100)
+#
+# print(batch_xs.shape)
+# print(batch_ys.shape)
+#
+# ###################################################### 배치단위 데이터 불러오기
+# x = tf.placeholder("float",[None,3]) # None으로 작성 -> 행의 개수 무관하게 작성 가능
+#
+# sess = tf.Session()
+# init = tf.global_variables_initializer()
+#
+# sess.run(init)
+# print(sess.run(x, feed_dict={x:[[2,2,2],[2,2,2],[2,2,2]]}))
+#
+# sess.close()
+
+# 118
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
+#
+# x = tf.placeholder('float',[None,784])
+#
+# batch_xs, batch_ys = mnist.train.next_batch(100)
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(x, feed_dict={x:batch_xs}).shape)
+
+###################################################### 텐서 플로우로 신경망 만들 때 가중치 생성 코드
+# W1 = tf.Variable(tf.random_uniform([784,50],-1,1)) # [-1,1] 사이의 숫자로 (784,50) 행렬의 변수를 W1로 생성
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(W1).shape)
+#     print(sess.run(W1))
+
+# 119
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+#
+# x = tf.placeholder('float', [None, 784])
+# batch_xs, batch_ys = mnist.train.next_batch(100)
+#
+# W1 = tf.Variable(tf.random_uniform([784, 50], -1, 1))
+# init = tf.global_variables_initializer()
+#
+# rs = tf.matmul(x, W1)
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(rs, feed_dict={x: batch_xs}))
+#     print(sess.run(rs, feed_dict={x: batch_xs}).shape)
+
+# 121
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+#
+# x = tf.placeholder('float', [None, 784])
+#
+# batch_xs, batch_ys = mnist.train.next_batch(100)
+#
+# W1 = tf.Variable(tf.random_uniform([784, 50], -1, 1))
+# b = tf.Variable(tf.ones([1, 50]))
+# rs = tf.matmul(x, W1) + b
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(rs, feed_dict={x: batch_xs}))
+
+# 122
+mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+
+x = tf.placeholder('float', [None, 784])
+
+batch_xs, batch_ys = mnist.train.next_batch(100)
+
+W1 = tf.Variable(tf.random_uniform([784, 50], -1, 1))
+b = tf.Variable(tf.ones([1, 50]))
+rs = tf.matmul(x, W1) + b
+
+y_hat = tf.sigmoid(rs)
 
 init = tf.global_variables_initializer()
 
 with tf.Session() as sess:
     sess.run(init)
-    print(sess.run(rs, feed_dict={x:[[6,7],[3,5],[2,9]], y:[[3,8,1],[4,5,2]]}))
+    print(sess.run(y_hat, feed_dict={x: batch_xs}))
+
+######################################################
