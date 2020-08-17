@@ -3,6 +3,7 @@ import numpy as np
 import warnings
 import os
 from tensorflow.examples.tutorials.mnist import input_data
+mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 warnings.filterwarnings('ignore')
 # old_v = tf.logging.get_verbosity()
@@ -343,7 +344,77 @@ warnings.filterwarnings('ignore')
 #     print(sess.run(y_hat, feed_dict={x: batch_xs}))
 
 # 124
-mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
+# batch_xs, batch_ys = mnist.train.next_batch(100)
+#
+# # 은닉1층
+# x = tf.placeholder('float',[None,784])
+# W1 = tf.Variable(tf.random_uniform([784,50],-1,1))
+# b1 = tf.Variable(tf.ones([1,50]))
+# y = tf.matmul(x, W1) + b1
+# y_hat = tf.nn.relu(y)
+#
+# # 출력층
+# W2 = tf.Variable(tf.random_uniform([50,10],-1,1))
+# b2 = tf.Variable(tf.ones([1,10]))
+# z = tf.matmul(y_hat,W2) + b2
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(z, feed_dict={x:batch_xs}))
+
+# 125
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
+# batch_xs, batch_ys = mnist.train.next_batch(100)
+#
+# # 은닉1층
+# x = tf.placeholder('float',[None,784])
+# W1 = tf.Variable(tf.random_uniform([784,50],-1,1))
+# b1 = tf.Variable(tf.ones([1,50]))
+# y = tf.matmul(x, W1) + b1
+# y_hat = tf.nn.relu(y)
+#
+# # 출력층
+# W2 = tf.Variable(tf.random_uniform([50,10],-1,1))
+# b2 = tf.Variable(tf.ones([1,10]))
+# z = tf.matmul(y_hat,W2) + b2
+#
+# z_hat = tf.nn.softmax(z)
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(z_hat, feed_dict={x:batch_xs}))
+
+# 126
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
+# batch_xs, batch_ys = mnist.train.next_batch(100)
+#
+# # 은닉1층
+# x = tf.placeholder('float',[None,784])
+# W1 = tf.Variable(tf.random_uniform([784,50],-1,1))
+# b1 = tf.Variable(tf.ones([1,50]))
+# y = tf.matmul(x, W1) + b1
+# y_hat = tf.nn.relu(y)
+#
+# # 출력층
+# W2 = tf.Variable(tf.random_uniform([50,10],-1,1))
+# b2 = tf.Variable(tf.ones([1,10]))
+# z = tf.matmul(y_hat,W2) + b2
+#
+# z_hat = tf.nn.softmax(z)
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(z_hat, feed_dict={x:batch_xs}))
+
+# 129
+# 데이터 불러오기
 batch_xs, batch_ys = mnist.train.next_batch(100)
 
 # 은닉1층
@@ -357,11 +428,24 @@ y_hat = tf.nn.relu(y)
 W2 = tf.Variable(tf.random_uniform([50,10],-1,1))
 b2 = tf.Variable(tf.ones([1,10]))
 z = tf.matmul(y_hat,W2) + b2
+z_hat = tf.nn.softmax(z)
 
+y_predict = tf.argmax(z_hat, axis=1)
+
+# 정확도 확인
+y_onehot = tf.placeholder('float',[None,10]) # 정답 데이터를 담을 배열
+y_label = tf.argmax(y_onehot, axis=1)
+
+correction_prediction = tf.equal(y_predict, y_label)
+
+accuracy = tf.reduce_mean(tf.cast(correction_prediction,'float'))
+
+# 변수 초기화
 init = tf.global_variables_initializer()
 
+# 그래프 실행
 with tf.Session() as sess:
     sess.run(init)
-    print(sess.run(z, feed_dict={x:batch_xs}))
+    print(sess.run(accuracy, feed_dict={x:batch_xs, y_onehot:batch_ys}))
 
 ######################################################
