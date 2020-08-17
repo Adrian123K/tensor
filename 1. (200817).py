@@ -305,22 +305,63 @@ warnings.filterwarnings('ignore')
 #     print(sess.run(rs, feed_dict={x: batch_xs}))
 
 # 122
-mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+#
+# x = tf.placeholder('float', [None, 784])
+#
+# batch_xs, batch_ys = mnist.train.next_batch(100)
+#
+# W1 = tf.Variable(tf.random_uniform([784, 50], -1, 1))
+# b = tf.Variable(tf.ones([1, 50]))
+# rs = tf.matmul(x, W1) + b
+#
+# y_hat = tf.sigmoid(rs)
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(y_hat, feed_dict={x: batch_xs}))
 
-x = tf.placeholder('float', [None, 784])
+# 123
+# mnist = input_data.read_data_sets("MNIST_data/", one_hot=True)
+#
+# x = tf.placeholder('float', [None, 784])
+#
+# batch_xs, batch_ys = mnist.train.next_batch(100)
+#
+# W1 = tf.Variable(tf.random_uniform([784, 50], -1, 1))
+# b = tf.Variable(tf.ones([1, 50]))
+# rs = tf.matmul(x, W1) + b
+#
+# y_hat = tf.nn.relu(rs)
+#
+# init = tf.global_variables_initializer()
+#
+# with tf.Session() as sess:
+#     sess.run(init)
+#     print(sess.run(y_hat, feed_dict={x: batch_xs}))
 
+# 124
+mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
 batch_xs, batch_ys = mnist.train.next_batch(100)
 
-W1 = tf.Variable(tf.random_uniform([784, 50], -1, 1))
-b = tf.Variable(tf.ones([1, 50]))
-rs = tf.matmul(x, W1) + b
+# 은닉1층
+x = tf.placeholder('float',[None,784])
+W1 = tf.Variable(tf.random_uniform([784,50],-1,1))
+b1 = tf.Variable(tf.ones([1,50]))
+y = tf.matmul(x, W1) + b1
+y_hat = tf.nn.relu(y)
 
-y_hat = tf.sigmoid(rs)
+# 출력층
+W2 = tf.Variable(tf.random_uniform([50,10],-1,1))
+b2 = tf.Variable(tf.ones([1,10]))
+z = tf.matmul(y_hat,W2) + b2
 
 init = tf.global_variables_initializer()
 
 with tf.Session() as sess:
     sess.run(init)
-    print(sess.run(y_hat, feed_dict={x: batch_xs}))
+    print(sess.run(z, feed_dict={x:batch_xs}))
 
 ######################################################
