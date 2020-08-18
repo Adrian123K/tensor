@@ -176,7 +176,7 @@ x = tf.placeholder('float',[None,784])
 x1 = tf.reshape(x,[-1,28,28,1]) # 흑백사진, 1층, batch 개수를 모르므로 -1. 2차원 -> 4차원으로 변경
 
 # Convolution 1층
-W1 = tf.Variable(tf.random_normal([5,5,1,32], stdde=0.01)) # 필터 32개 생성
+W1 = tf.Variable(tf.random_normal([5,5,1,32], stddev=0.01)) # 필터 32개 생성
 b1 = tf.Variable(tf.ones([32])) # 숫자 1로 채워진 bias 생성
 y1 = tf.nn.conv2d(x1, W1, strides=[1,1,1,1], padding='SAME')
 y1 = y1 + b1
@@ -184,7 +184,7 @@ y1 = tf.nn.relu(y1)
 y1 = tf.nn.max_pool(y1, ksize=[1,2,2,1], strides=[1,2,2,1], padding='SAME') # ksize : 필터 사이즈
 y1 = tf.reshape(y1, [-1,14*14*32]) # y1 4차원 -> 2차원
 
-# 완전연결계층 1층
+# 완전연결계층 1층 (2층)
 W2 = tf.get_variable(name="W2", shape=[14*14*32,100], initializer = tf.contrib.layers.variance_scaling_initializer())
 b2 = tf.Variable(tf.ones([1,100]))
 
@@ -194,7 +194,7 @@ batch_y2 = tf.contrib.layers.batch_norm(y2, True)
 
 y2_hat = tf.nn.relu(batch_y2)
 
-# 완전연결계층 2층
+# 완전연결계층 2층 (3층)
 W3 = tf.get_variable(name="W3", shape=[100,50], initializer = tf.contrib.layers.variance_scaling_initializer())
 b3 = tf.Variable(tf.ones([1,50]))
 
@@ -204,7 +204,7 @@ batch_y3 = tf.contrib.layers.batch_norm(y3, True)
 
 y3_hat = tf.nn.relu(batch_y3)
 
-# 출력층
+# 출력층 (4층)
 W4 = tf.get_variable(name="W4", shape=[50,10], initializer = tf.contrib.layers.variance_scaling_initializer())
 b4 = tf.Variable(tf.ones([1,10]))
 
