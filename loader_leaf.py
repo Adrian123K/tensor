@@ -13,8 +13,8 @@ def label_load(path):
     labeldata = csv.reader(file)
     label = np.array(list(labeldata))
     label = label.astype(int)
-    label = np.eye(10)[label]
-    return label.reshape(-1, 10)
+    label = np.eye(2)[label]
+    return label.reshape(-1, 2)
 
 def next_batch(data1, data2, init, final):
     return data1[init:final], data2[init:final]
