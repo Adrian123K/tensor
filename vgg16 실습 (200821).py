@@ -69,3 +69,4 @@ history = model.fit(train_generator,
                     steps_per_epoch = get_step(len(x_train), batch_size),
                     validation_data = val_generator,
                     validation_steps = get_step(len(x_val), batch_size))
+
